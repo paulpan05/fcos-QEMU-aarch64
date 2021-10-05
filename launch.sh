@@ -1,0 +1,17 @@
+qemu-system-aarch64 \
+  -machine virt \
+  -cpu cortex-a72 \
+  -smp 4 \
+  -m 4096 \
+  -rtc base=utc,clock=host,driftfix=slew \
+  -bios QEMU_EFI.fd \
+  -device virtio-rng-pci \
+  -device virtio-balloon \
+  -nographic \
+  -no-reboot \
+  -serial mon:stdio \
+  -monitor "unix:monitor.sock,server,nowait" \
+  -netdev user,id=vnet,hostfwd=tcp::2222-:22 \
+  -device virtio-net-pci,netdev=vnet \
+  -drive file=image.qcow2,if=virtio \
+  -fw_cfg name=opt/com.coreos/config,file=config.ign
